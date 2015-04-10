@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Js Canvas test</title>
+
+		<script src="Util.js"></script>
+		<script src="class/Const.js"></script>
+
+		<script src="class/Resource.js"></script>
+		<script src="class/Sprite.js"></script>
+		<script src="class/Sound.js"></script>
+
+		<script src="class/ResourceManager.js"></script>
+
+		<script src="class/Collidable.js"></script>
+
+		<script src="class/Item.js"></script>
+		<script src="class/ObjectLayer.js"></script>
+		<script src="class/Tile.js"></script>
+		<script src="class/TileLayer.js"></script>
+		<script src="class/TileSet.js"></script>
+		<script src="class/TileMap.js"></script>
+
+		<script src="class/AnimationFrame.js"></script>
+		<script src="class/Animation.js"></script>
+
+		<script src="class/Character.js"></script>
+
+		<script src="class/Ghost.js"></script>
+		<script src="class/Blinky.js"></script>
+		<script src="class/Pinky.js"></script>
+		<script src="class/Inky.js"></script>
+		<script src="class/Clyde.js"></script>
+
+		<script src="class/PacMan.js"></script>
+		<script src="class/MsPacMan.js"></script>
+
+		<script src="class/Game.js"></script>
+		<script src="class/Sandbox.js"></script>
+		<script src="Debug.js"></script>
+		<script src="pm.js"></script>
+
+		<style type="text/css">
+			canvas {
+				position:absolute;
+				left: 0px;
+				top: 0px;
+			}
+
+			.controls {
+				/*display: none;*/
+				position: absolute;
+				left: 550px;
+			}
+
+			.debug {
+				margin-top: 5px;				
+				padding: 5px;
+				border: solid thin #ddd;
+			}
+
+			.form-row {
+				display: block;
+				padding: 2px;
+			}
+			.checkboxLabel {
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="controls">
+			<input type="button" id="btnStart" value="Start" />
+			<input type="button" id="btnPause" value="Pause" />
+			<input type="button" id="btnHide" value="Hide" />
+			<section class="debug">
+				<div class="form-row">
+					<input type="checkbox" id="tileGrid" value="tileGrid"/>
+					<label class="checkboxLabel" id="tileGridLabel">Tile Grid</label>
+				</div>
+				<div class="form-row">
+					<input type="checkbox" id="tileCollisions" value="tileCollisions"/>
+					<label class="checkboxLabel" id="tileCollisionsLabel">Tile Collisions Map</label>
+				</div>
+				<div class="form-row">
+					<input type="checkbox" id="targetTile" value="targetTile"/>
+					<label class="checkboxLabel" id="targetTileLabel">Ghost Target Tile</label>
+				</div>
+				<div class="form-row">
+					<input type="checkbox" id="characterBox" value="characterBox"/>
+					<label class="checkboxLabel" id="characterBoxLabel">Character Box</label>
+				</div>
+				<div class="form-row">
+					<input type="checkbox" id="eatenDotCounter" value="eatenDotCounter"/>
+					<label class="checkboxLabel" id="eatenDotCounterLabel">Eaten Dots Counter</label>
+				</div>
+				<div class="form-row">
+					<input type="checkbox" id="remainingDotCounter" value="remainingDotCounter"/>
+					<label class="checkboxLabel" id="remainingDotCounterLabel">Remaining Dots Counter</label>
+				</div>
+			</section>
+		</div>
+	</body>
+</html>
