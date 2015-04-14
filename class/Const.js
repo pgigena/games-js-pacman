@@ -56,7 +56,7 @@ var Const = {
 		scareTime: 6000,
 		scatterTime: 5000,
 		chaseTime: 20000,
-		fruit: 15000,//9000,
+		fruit: 15000,
 		eatingGhost: 500
 	},
 	targetTiles: {
