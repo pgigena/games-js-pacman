@@ -3919,7 +3919,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/board_tiles_green.png",
+         "image":"..\/sprite\/board_tiles_green.png",
          "imageheight":77,
          "imagewidth":229,
          "margin":1,
@@ -4113,7 +4113,7 @@
         }, 
         {
          "firstgid":49,
-         "image":"..\/dots.png",
+         "image":"..\/sprite\/dots.png",
          "imageheight":10,
          "imagewidth":19,
          "margin":1,
@@ -4128,7 +4128,7 @@
         }, 
         {
          "firstgid":51,
-         "image":"..\/fruit.png",
+         "image":"..\/sprite\/fruit.png",
          "imageheight":31,
          "imagewidth":60,
          "margin":1,

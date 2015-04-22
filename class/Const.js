@@ -129,7 +129,7 @@ var Const = {
 	},
 	path: {
 		root: document.URL.substring(0, document.URL.lastIndexOf('\/')),
-		image: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/',
+		image: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/sprite/',
 		map: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/tilemap/',
 		sound: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/sound/'
 	},
