@@ -193,7 +193,9 @@ Game.prototype.initializeKeyboardInput = function () {
 			}
 		}
 
-//		e.preventDefault();
+		if (xDisp || yDisp) {
+			e.preventDefault();
+		}
 	});
 };
 
