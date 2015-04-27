@@ -156,6 +156,45 @@ Game.prototype.initializeKeyboardInput = function () {
 				evt.preventDefault();
 		}
 	});
+
+	var touchX, touchY;
+
+	window.addEventListener('touchstart', function (e){
+		touchX = e.touches[0].clientX;
+		touchY = e.touches[0].clientY;
+	});
+
+	window.addEventListener('touchend', function (e){
+		var deltaX = touchX - e.changedTouches[0].clientX;
+		var deltaY = touchY - e.changedTouches[0].clientY;
+
+		var xDisp = Math.abs(deltaX) > 60 ? true : false;
+		var yDisp = Math.abs(deltaY) > 60 ? true : false;
+
+		if (xDisp && yDisp) {
+			if (xDisp > yDisp) {
+				yDisp = false;
+			} else {
+				xDisp = false;
+			}
+		}
+
+		if (xDisp) {
+			if (deltaX > 0) {
+				that.keyHandler(37);
+			} else {
+				that.keyHandler(39);
+			}
+		} else if (yDisp) {
+			if (deltaY > 0) {
+				that.keyHandler(38);
+			} else {
+				that.keyHandler(40);
+			}
+		}
+
+//		e.preventDefault();
+	});
 };
 
 Game.prototype.loadResources = function () {
