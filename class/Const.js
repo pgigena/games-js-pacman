@@ -142,6 +142,7 @@ var Const = {
 
 var Config = {
 	settings: {
+		scale: 0.5,
 		fps: 60,
 		allowTurnoverMargin: true,
 		turnoverMargin: 5000,

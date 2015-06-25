@@ -116,10 +116,11 @@ Character.prototype.draw = function (g) {
 
 	if (Config.debug.characterBounds) {
 		g.strokeStyle = '#FFFFFF';
-		g.strokeRect(this.x, this.y, this.w, this.h);
+		g.strokeRect(this.x * Config.settings.scale, this.y * Config.settings.scale, this.w * Config.settings.scale, this.h * Config.settings.scale);
 	}
 
-	this.animations[this.currentAnimation].draw(this.x, this.y, this.w, this.h, overflowX, overflowY, g);
+//	this.animations[this.currentAnimation].draw(this.x, this.y, this.w, this.h, overflowX, overflowY, g);
+	this.animations[this.currentAnimation].draw(this.x * Config.settings.scale, this.y * Config.settings.scale, this.w * Config.settings.scale, this.h * Config.settings.scale, overflowX, overflowY, g);
 };
 
 Character.prototype.changeAnimation = function (animationIndex) {

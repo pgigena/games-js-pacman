@@ -122,7 +122,8 @@ TileMap.prototype.drawTileLayer = function (g, layer) {
 				}
 			}
 
-			g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, (tileIndex * tileW), (rowNumber * tileH), tileW, tileH);
+//			g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, (tileIndex * tileW), (rowNumber * tileH), tileW, tileH);
+			g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, (tileIndex * tileW) * Config.settings.scale, (rowNumber * tileH) * Config.settings.scale, tileW * Config.settings.scale, tileH * Config.settings.scale);
 
 			if (Config.debug.collisionMap) {
 				if (this.hasCollision(tileIndex, rowNumber)) {
@@ -130,12 +131,14 @@ TileMap.prototype.drawTileLayer = function (g, layer) {
 				} else {
 					g.fillStyle = '#0000FF';
 				}
-				g.fillRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
+//				g.fillRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
+				g.fillRect((tileIndex * this.tileW) * Config.settings.scale, (rowNumber * this.tileH) * Config.settings.scale, this.tileW * Config.settings.scale, this.tileH * Config.settings.scale);
 			}
 
 			if (Config.debug.tileGrid) {
 				g.strokeStyle = '#00FF00';
-				g.strokeRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
+//				g.strokeRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
+				g.strokeRect((tileIndex * this.tileW) * Config.settings.scale, (rowNumber * this.tileH) * Config.settings.scale, this.tileW * Config.settings.scale, this.tileH * Config.settings.scale);
 			}
 		}
 	}
@@ -165,7 +168,8 @@ TileMap.prototype.drawTile = function (g, gId, x, y) {
 		}
 	}
 
-	g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, x, y, tileW, tileH);
+//	g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, x, y, tileW, tileH);
+	g.drawImage(sprite.image, tileOffset.x, tileOffset.y, tileW, tileH, x * Config.settings.scale, y * Config.settings.scale, tileW * Config.settings.scale, tileH * Config.settings.scale);
 };
 
 TileMap.prototype.getCorrespondingTile = function (x, y) {

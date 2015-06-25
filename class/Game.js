@@ -1013,9 +1013,11 @@ Game.prototype.drawHud = function () {
 
 	while (drawingLife < this.playerLives) {
 		if (Config.settings.missPacMan) {
-			g.drawImage(lifeSprite.image, 83, 3, 15, 15, currentX + (20 * drawingLife), Const.board.h - 50, 17, 17);
+//			g.drawImage(lifeSprite.image, 83, 3, 15, 15, currentX + (20 * drawingLife), Const.board.h - 50, 17, 17);
+			g.drawImage(lifeSprite.image, 83, 3, 15, 15, (currentX + (20 * drawingLife)) * Config.settings.scale, (Const.board.h - 50) * Config.settings.scale, 17 * Config.settings.scale, 17 * Config.settings.scale);
 		} else {
-			g.drawImage(lifeSprite.image, 3, 3, 13, 13, currentX + (20 * drawingLife), Const.board.h - 50, 17, 17);
+//			g.drawImage(lifeSprite.image, 3, 3, 13, 13, currentX + (20 * drawingLife), Const.board.h - 50, 17, 17);
+			g.drawImage(lifeSprite.image, 3, 3, 13, 13, (currentX + (20 * drawingLife)) * Config.settings.scale, (Const.board.h - 50) * Config.settings.scale, 17 * Config.settings.scale, 17 * Config.settings.scale);
 		}
 		
 		drawingLife++;
@@ -1023,9 +1025,11 @@ Game.prototype.drawHud = function () {
 
 	// Ready sign
 	if (this.state === Const.gameState.ready) {
-		g.drawImage(lifeSprite.image, 203, 2, 46, 7, Const.board.w / 2 - 46, Const.board.h / 2 + 20, 92, 14);
+//		g.drawImage(lifeSprite.image, 203, 2, 46, 7, Const.board.w / 2 - 46, Const.board.h / 2 + 20, 92, 14);
+		g.drawImage(lifeSprite.image, 203, 2, 46, 7, (Const.board.w / 2 - 46) * Config.settings.scale, (Const.board.h / 2 + 20) * Config.settings.scale, 92 * Config.settings.scale, 14 * Config.settings.scale);
 	} else if (this.state === Const.gameState.gameOver) {
-		g.drawImage(lifeSprite.image, 13, 192, 79, 7, Const.board.w / 2 - 79, Const.board.h / 2 + 20, 158, 14);
+//		g.drawImage(lifeSprite.image, 13, 192, 79, 7, Const.board.w / 2 - 79, Const.board.h / 2 + 20, 158, 14);
+		g.drawImage(lifeSprite.image, 13, 192, 79, 7, (Const.board.w / 2 - 79) * Config.settings.scale, (Const.board.h / 2 + 20) * Config.settings.scale, 158 * Config.settings.scale, 14 * Config.settings.scale);
 	}
 
 	var debugText = new Array();
@@ -1063,14 +1067,13 @@ Game.prototype.killPacMan = function () {
 	this.removeFruit();
 
 	// When lives reach zero, game over man
+	// TODO: Try to change this to inline if
 	if (this.playerLives) {
 		callback = function () {
-			that.stateTimer = null;
 			that.resetLevel();
 		};
 	} else {
 		callback = function () {
-			that.stateTimer = null;
 			that.gameOver();
 		};
 	}
