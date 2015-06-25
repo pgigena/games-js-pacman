@@ -9,7 +9,9 @@ Features:
 - Implement pause button.
 - Implement ghost manager.
 - Add bounds and current tile coordinates to character entity.
-- Add score when eating a ghost.
+- Add score graphic when eating a ghost.
+- Add custom DrawSprite method to make scalability code less intrusive.
+- Replace all texts by sprite-based fonts.
 
 Bugs:
 
