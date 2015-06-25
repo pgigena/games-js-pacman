@@ -82,9 +82,7 @@ Game.prototype.initialize = function () {
 Game.prototype.initializeLevel = function () {
 	this.initializeMap();
 	this.resetCounters();
-	this.resetCharacters();
-	this.removeFruit();
-	this.showReadyScreen();
+	this.resetLevel();
 
 	this.drawMap();
 };
@@ -1091,6 +1089,7 @@ Game.prototype.killPacMan = function () {
 
 Game.prototype.resetLevel = function () {
 	this.resetCharacters();
+	this.removeFruit();
 	this.showReadyScreen();
 };
 
