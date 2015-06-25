@@ -1,3 +1,5 @@
+/* global ResourceManager, Const, Config */
+
 function Game() {
 	this.graphics = null;
 	this.hudGraphics = null;
