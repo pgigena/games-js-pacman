@@ -38,7 +38,7 @@ function Timer(callback, delay) {
 	};
 
 	this.stop = function () {
-		window.clearInterval(timerId);
+		window.clearTimeout(timerId);
 	};
 
 	this.resume();

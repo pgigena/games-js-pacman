@@ -1075,6 +1075,7 @@ Game.prototype.killPacMan = function () {
 
 	deathSound.onFinish( function () {
 		that.stateTimer = new Timer(function () {
+			that.stateTimer = null;
 			callback();
 		}, 1000);
 	});

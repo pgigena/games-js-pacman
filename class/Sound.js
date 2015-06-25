@@ -3,6 +3,9 @@ function Sound(path) {
 
 	this.path = path;
 	this.audio = null;
+	
+	this.hasEventListener = false;
+	this.eventListenerMethod = function () {};
 }
 
 Sound.subclass(Resource);
@@ -20,7 +23,16 @@ Sound.prototype.load = function () {
 };
 
 Sound.prototype.onFinish = function (callback) {
-	this.audio.addEventListener('ended', function() { callback(); });
+	var that = this;
+	if (!this.hasEventListener) {
+		this.audio.addEventListener('ended', function() {
+			that.eventListenerMethod();
+		});
+
+		this.hasEventListener = true;
+	}
+	
+	this.eventListenerMethod = callback;
 };
 
 Sound.prototype.play = function () {
