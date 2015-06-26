@@ -14,8 +14,8 @@ function PacMan(x, y, w, h) {
 PacMan.subclass(Character);
 
 PacMan.prototype.initialize = function () {
-	this.w = 18;
-	this.h = 18;
+	this.bounds.w = 18;
+	this.bounds.h = 18;
 
 	this.moveDirection = Const.direction.none;
 	this.moveSpeed = Const.pacMan.baseSpeed;

@@ -27,10 +27,7 @@ function Ghost(x, y, w, h) {
 	this.dotCounter = 0;
 	this.spawned = false;
 
-	this.targetTile = {
-		x: 0,
-		y: 0
-	};
+	this.targetTile = new Vector();
 }
 
 Ghost.subclass(Character);
@@ -38,8 +35,8 @@ Ghost.subclass(Character);
 Ghost.prototype.initialize = function () {
 	this.moveSpeed = Const.ghost.speed.base;
 
-	this.w = 17;
-	this.h = 17;
+	this.bounds.w = 17;
+	this.bounds.h = 17;
 };
 
 Ghost.prototype.initAnimations = function (sprite, offsetY) {
@@ -206,7 +203,7 @@ Ghost.prototype.setTargetTile = function (x, y) {
 };
 
 Ghost.prototype.pathfinding = function (tileMap) {
-	var currentTiles = tileMap.getCorrespondingTiles(this.x, this.y, this.w, this.h);
+	var currentTiles = tileMap.getCorrespondingTiles(this.pos.x, this.pos.y, this.bounds.w, this.bounds.h);
 
 	if (currentTiles.length > 1) {
 		return;
@@ -400,56 +397,53 @@ Ghost.prototype.revertDirection = function () {
 };
 
 Ghost.prototype.correctPosition = function (correctionMargin) {
-	this.prevPos.x = this.x;
-	this.prevPos.y = this.y;
+	this.prevPos.x = this.pos.x;
+	this.prevPos.y = this.pos.y;
 
-	var newPos = {
-		x: this.x,
-		y: this.y
-	};
+	var newPos = new Vector();
 
-	var center = {
-		x: this.x + (this.w / 2),
-		y: this.y + (this.h / 2)
-	};
+	var center = new Vector(
+		this.pos.x + (this.bounds.w / 2),
+		this.pos.y + (this.bounds.h / 2)
+	);
 
 	switch (this.moveDirection) {
 		case Const.direction.left:
-			newPos.x = this.x - correctionMargin;
+			newPos.x = this.pos.x - correctionMargin;
 
 			if (center.x - correctionMargin < 0) {
-				newPos.x = Const.board.w - Math.round(this.w / 2);
+				newPos.x = Const.board.w - Math.round(this.bounds.w / 2);
 			}
 			break;
 		case Const.direction.right:
-			newPos.x = this.x + correctionMargin;
+			newPos.x = this.os.x + correctionMargin;
 
 			if (center.x + correctionMargin > Const.board.w) {
-				newPos.x = 0 - Math.round(this.w / 2);
+				newPos.x = 0 - Math.round(this.bounds.w / 2);
 			}
 
 			break;
 		case Const.direction.up:
-			newPos.y = this.y - correctionMargin;
+			newPos.y = this.pos.y - correctionMargin;
 
 			if (center.y - correctionMargin < 0) {
-				newPos.y = Const.board.h - Math.round(this.h / 2);
+				newPos.y = Const.board.h - Math.round(this.bounds.h / 2);
 			}
 
 			break;
 		case Const.direction.down:
-			newPos.y = this.y + correctionMargin;
+			newPos.y = this.pos.y + correctionMargin;
 
 			if (center.y + correctionMargin > Const.board.h) {
-				newPos.y = 0 - Math.round(this.h / 2);
+				newPos.y = 0 - Math.round(this.bounds.h / 2);
 			}
 			break;
 		case Const.direction.stopped:
 			break;
 	}
 
-	this.x = newPos.x;
-	this.y = newPos.y;
+	this.pos.x = newPos.x;
+	this.pos.y = newPos.y;
 };
 
 Ghost.prototype.getOppositeDirection = function (direction) {

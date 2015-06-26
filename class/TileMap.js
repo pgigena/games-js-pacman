@@ -147,7 +147,7 @@ TileMap.prototype.drawTileLayer = function (g, layer) {
 TileMap.prototype.drawObjectLayer = function (g, layer) {
 	for (var i in layer.items) {
 		if (layer.items[i].visible) {
-			this.drawTile(g, layer.items[i].gId, layer.items[i].x, layer.items[i].y);
+			this.drawTile(g, layer.items[i].gId, layer.items[i].pos.x, layer.items[i].pos.y);
 		}
 	}
 };
@@ -180,22 +180,19 @@ TileMap.prototype.getCorrespondingTile = function (x, y) {
 TileMap.prototype.getCorrespondingTiles = function (x, y, w, h) {
 	var response = new Array();
 
-	var topLeftTile = {
-		x: (x / this.tileW) | 0,
-		y: (y / this.tileH) | 0
-	};
+	var topLeftTile = new Vector(
+		(x / this.tileW) | 0,
+		(y / this.tileH) | 0
+	);
 
-	var bottomRightTile = {
-		x: ((x + w) / this.tileW) | 0,
-		y: ((y + h) / this.tileH) | 0
-	};
+	var bottomRightTile = new Vector(
+		((x + w) / this.tileW) | 0,
+		((y + h) / this.tileH) | 0
+	);
 
 	for (var row = topLeftTile.y; row <= bottomRightTile.y; row++) {
 		for (var column = topLeftTile.x; column <= bottomRightTile.x; column++) {
-			var tile = {
-				x: column,
-				y: row
-			};
+			var tile = new Vector(column, row);
 
 			// Wrap the right edge of the map back to the left
 			if (column >= this.w) {
@@ -332,7 +329,7 @@ TileMap.prototype.buildDotMap = function () {
 		if (layer.items[i].type === Const.tmx.objTypes.fruit) {
 			continue;
 		}
-		var currentTile = this.getCorrespondingTiles(layer.items[i].x, layer.items[i].y, layer.items[i].w, layer.items[i].h);
+		var currentTile = this.getCorrespondingTiles(layer.items[i].pos.x, layer.items[i].pos.y, layer.items[i].bounds.w, layer.items[i].bounds.h);
 		this.dotsCollisionMap[currentTile[0].x][currentTile[0].y] = layer.items[i];
 		this.dotCount++;
 	}

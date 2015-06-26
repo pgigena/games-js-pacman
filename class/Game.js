@@ -223,10 +223,10 @@ Game.prototype.initCanvases = function () {
 	document.body.appendChild(ResourceManager.getCanvas('hud'));
 	var that = this;
 
-	document.getElementById('hud').addEventListener('click', function (evt) {
+//	document.getElementById('hud').addEventListener('click', function (evt) {
 //		var tile = that.tileMap.getCorrespondingTile(evt.x, evt.y);
-		that.ghosts[Const.ghost.key.blinky].setTargetTile(tile.x, tile.y);
-	});
+//		that.ghosts[Const.ghost.key.blinky].setTargetTile(tile.x, tile.y);
+//	});
 
 	this.graphics = ResourceManager.getCanvas('game').getContext('2d');
 	this.hudGraphics = ResourceManager.getCanvas('hud').getContext('2d');
@@ -248,14 +248,14 @@ Game.prototype.resetCharacters = function () {
 	var startingPosLayer = this.tileMap.findObjectLayer(Const.tmx.layers.regions);
 	var startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, Const.pacMan.name);
 
-	this.pacMan.x = startingTile.x;
-	this.pacMan.y = startingTile.y;
+	this.pacMan.pos.x = startingTile.x;
+	this.pacMan.pos.y = startingTile.y;
 
 	for (var index in this.ghosts) {
 		startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, this.ghosts[index].name);
 
-		this.ghosts[index].x = startingTile.x;
-		this.ghosts[index].y = startingTile.y;
+		this.ghosts[index].pos.x = startingTile.x;
+		this.ghosts[index].pos.y = startingTile.y;
 	}
 
 	// Starting directions
@@ -325,7 +325,7 @@ Game.prototype.mainLoop = function () {
 			this.draw();
 			break;
 		case Const.gameState.eatingGhost:
-			// Draw score over ghost
+			// @TODO: Draw score over ghost
 			this.drawHud();
 			break;
 		case Const.gameState.ready:
@@ -346,10 +346,9 @@ Game.prototype.mainLoop = function () {
 };
 
 Game.prototype.checkPacmanWallCollisions = function () {
-	var center = {
-		x: this.pacMan.x + this.pacMan.w / 2,
-		y: this.pacMan.y + this.pacMan.h / 2
-	};
+	var center = new Vector(
+		this.pacMan.pos.x + this.pacMan.bounds.w / 2,
+		this.pacMan.pos.y + this.pacMan.bounds.h / 2);
 
 	var tileMap = this.tileMap;
 	var tile = tileMap.getCorrespondingTile(center.x, center.y);
@@ -383,7 +382,7 @@ Game.prototype.checkPacmanWallCollisions = function () {
 
 Game.prototype.checkGhostWallCollisions = function (character) {
 	var tileMap = this.tileMap;
-	var collidingTiles = tileMap.getCorrespondingTiles(character.x, character.y, character.w, character.h);
+	var collidingTiles = tileMap.getCorrespondingTiles(character.pos.x, character.pos.y, character.bounds.w, character.bounds.h);
 
 	for (var i in collidingTiles) {
 		if (tileMap.hasCollision(collidingTiles[i].x, collidingTiles[i].y)) {
@@ -397,11 +396,11 @@ Game.prototype.checkGhostWallCollisions = function (character) {
 
 Game.prototype.checkCollisions = function () {
 	var ghosts = this.ghosts;
-	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.x + this.pacMan.w / 2, this.pacMan.y + this.pacMan.h / 2);
+	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x + this.pacMan.bounds.w / 2, this.pacMan.pos.y + this.pacMan.bounds.h / 2);
 
 	for (var index in ghosts) {
 		if (!Config.settings.ghostBoxCollision) {
-			var ghostTile = this.tileMap.getCorrespondingTile(ghosts[index].x + ghosts[index].w / 2, ghosts[index].y + ghosts[index].h / 2);
+			var ghostTile = this.tileMap.getCorrespondingTile(ghosts[index].pos.x + ghosts[index].bounds.w / 2, ghosts[index].pos.y + ghosts[index].bounds.h / 2);
 		}
 
 		if (Config.settings.ghostBoxCollision && this.pacMan.isColliding(ghosts[index])
@@ -431,7 +430,6 @@ Game.prototype.checkCollisions = function () {
 				});
 				ghostEat.play();
 			} else if (!ghosts[index].isReturning()) {
-				// @TODO: UNCOMMENT!
 				this.killPacMan();
 			}
 		}
@@ -439,7 +437,7 @@ Game.prototype.checkCollisions = function () {
 };
 
 Game.prototype.checkDotCollisions = function () {
-	var correspondingTiles = this.tileMap.getCorrespondingTiles(this.pacMan.x, this.pacMan.y, this.pacMan.w, this.pacMan.h);
+	var correspondingTiles = this.tileMap.getCorrespondingTiles(this.pacMan.pos.x, this.pacMan.pos.y, this.pacMan.bounds.w, this.pacMan.bounds.h);
 
 	if (this.tileMap.fruitVisible && this.pacMan.isColliding(this.tileMap.currentFruit)) {
 		ResourceManager.getSound('eatfruit').play();
@@ -546,8 +544,8 @@ Game.prototype.keyHandler = function (keyCode) {
 
 Game.prototype.checkDirectionChange = function () {
 	var center = {
-		x: this.pacMan.x + this.pacMan.w / 2,
-		y: this.pacMan.y + this.pacMan.h / 2
+		x: this.pacMan.pos.x + this.pacMan.bounds.w / 2,
+		y: this.pacMan.pos.y + this.pacMan.bounds.h / 2
 	};
 
 	var tile = this.tileMap.getCorrespondingTile(center.x, center.y);
@@ -648,7 +646,7 @@ Game.prototype.updatePositions = function () {
 		}
 		this.correctPacmanLane();
 
-		this.checkDotCollisions();
+//		this.checkDotCollisions();
 	}
 	this.ghostManager();
 
@@ -776,7 +774,7 @@ Game.prototype.spawnConditionsMet = function (ghostKey) {
 };
 
 Game.prototype.ghostChaseMode = function (ghostKey) {
-	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.x + (this.pacMan.w / 2), this.pacMan.y + (this.pacMan.h / 2));
+	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x + (this.pacMan.bounds.w / 2), this.pacMan.pos.y + (this.pacMan.bounds.h / 2));
 	var targetTile = null;
 
 	switch (ghostKey) {
@@ -798,20 +796,14 @@ Game.prototype.ghostChaseMode = function (ghostKey) {
 };
 
 Game.prototype.getBlinkyChaseTile = function (pacManTile) {
-	return {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	return new Vector(pacManTile.x, pacManTile.y);
 };
 
 Game.prototype.getInkyChaseTile = function (pacManTile) {
 	var blinky = this.ghosts[Const.ghost.key.blinky];
 	var blinkyTile = this.tileMap.getCorrespondingTile(blinky.x + blinky.w / 2, blinky.y + blinky.h / 2);
 
-	var tile = {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	var tile = new Vector(pacManTile.x, pacManTile.y);
 
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
@@ -1150,30 +1142,30 @@ Game.prototype.removeFruit = function () {
 };
 
 Game.prototype.correctPacmanLane = function () {
-	var currentTile = this.tileMap.getCorrespondingTile(this.pacMan.x, this.pacMan.y);
+	var currentTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x, this.pacMan.pos.y);
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
 		case Const.direction.down:
 			var currentTileCenterX = currentTile.x * this.tileMap.tileW + (this.tileMap.tileW / 2);
-			var pacManCenterX = this.pacMan.x + this.pacMan.w / 2;
+			var pacManCenterX = this.pacMan.pos.x + this.pacMan.bounds.w / 2;
 			currentTileCenterX += 1;
 
 			if (pacManCenterX < currentTileCenterX && pacManCenterX > currentTileCenterX - Const.pacMan.cornering.left) {
-				this.pacMan.x++;
+				this.pacMan.pos.x++;
 			} else if (pacManCenterX > currentTileCenterX && pacManCenterX < currentTileCenterX + Const.pacMan.cornering.right) {
-				this.pacMan.x--;
+				this.pacMan.pos.x--;
 			}
 
 			break;
 		case Const.direction.left:
 		case Const.direction.right:
 			var currentTileCenterY = currentTile.y * this.tileMap.tileH + (this.tileMap.tileH / 2);
-			var pacManCenterY = this.pacMan.y + this.pacMan.h / 2;
+			var pacManCenterY = this.pacMan.pos.y + this.pacMan.bounds.h / 2;
 
 			if (pacManCenterY < currentTileCenterY && pacManCenterY > currentTileCenterY - Const.pacMan.cornering.up) {
-				this.pacMan.y++;
+				this.pacMan.pos.y++;
 			} else if (pacManCenterY > currentTileCenterY && pacManCenterY < currentTileCenterY + Const.pacMan.cornering.down) {
-				this.pacMan.y--;
+				this.pacMan.pos.y--;
 			}
 
 			break;

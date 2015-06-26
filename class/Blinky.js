@@ -28,7 +28,7 @@ Blinky.prototype.draw = function (g) {
 		g.fillStyle = '#f00';
 		g.strokeStyle = '#fff';
 
-		g.fillRect(this.targetTile.x * 18, this.targetTile.y * 18, this.w, this.h);
+		g.fillRect(this.targetTile.x * 18, this.targetTile.y * 18, this.bounds.w, this.bounds.h);
 		g.strokeText('B', (this.targetTile.x * 18) + 5, (this.targetTile.y * 18) + 12);
 
 		g.fillStyle = fillStyle;

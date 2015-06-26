@@ -23,12 +23,12 @@ Item.prototype.initialize = function (objectData) {
 
 	// Correction for the Y offset of tile objects
 	if (objectData.hasOwnProperty('gid')) {
-		this.y = objectData.y - objectData.height;
+		this.pos.y = objectData.y - objectData.height;
 	} else {
-		this.y = objectData.y;
+		this.pos.y = objectData.y;
 	}
 
-	this.x = objectData.x;
+	this.pos.x = objectData.x;
 	
 	this.w = objectData.width;
 	this.h = objectData.height;
