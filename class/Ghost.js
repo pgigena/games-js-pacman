@@ -413,7 +413,7 @@ Ghost.prototype.correctPosition = function (correctionMargin) {
 			}
 			break;
 		case Const.direction.right:
-			newPos.x = this.os.x + correctionMargin;
+			newPos.x = this.pos.x + correctionMargin;
 
 			if (center.x + correctionMargin > Const.board.w) {
 				newPos.x = 0 - Math.round(this.bounds.w / 2);

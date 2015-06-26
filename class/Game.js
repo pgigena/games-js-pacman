@@ -355,22 +355,22 @@ Game.prototype.checkPacmanWallCollisions = function () {
 
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
-			if ((center.y <= (tile.y * tileMap.tileH) + 6) && tileMap.hasCollision(tile.x, tile.y - 1)) {
+			if ((center.y <= (tile.y * tileMap.tileBounds.h) + 6) && tileMap.hasCollision(tile.x, tile.y - 1)) {
 				return true;
 			}
 			break;
 		case Const.direction.down:
-			if ((center.y >= (tile.y * tileMap.tileH) + tileMap.tileH - 7) && tileMap.hasCollision(tile.x, tile.y + 1)) {
+			if ((center.y >= (tile.y * tileMap.tileBounds.h) + tileMap.tileBounds.h - 7) && tileMap.hasCollision(tile.x, tile.y + 1)) {
 				return true;
 			}
 			break;
 		case Const.direction.left:
-			if ((center.x <= (tile.x * tileMap.tileW) + 6) && tileMap.hasCollision(tile.x - 1, tile.y)) {
+			if ((center.x <= (tile.x * tileMap.tileBounds.w) + 6) && tileMap.hasCollision(tile.x - 1, tile.y)) {
 				return true;
 			}
 			break;
 		case Const.direction.right:
-			if ((center.x >= (tile.x * tileMap.tileW) + tileMap.tileW - 7) && tileMap.hasCollision(tile.x + 1, tile.y)) {
+			if ((center.x >= (tile.x * tileMap.tileBounds.w) + tileMap.tileBounds.w - 7) && tileMap.hasCollision(tile.x + 1, tile.y)) {
 				return true;
 			}
 			break;
@@ -380,7 +380,7 @@ Game.prototype.checkPacmanWallCollisions = function () {
 	return false;
 };
 
-Game.prototype.checkGhostWallCollisions = function (character) {
+Game.prototype.checkWallCollisions = function (character) {
 	var tileMap = this.tileMap;
 	var collidingTiles = tileMap.getCorrespondingTiles(character.pos.x, character.pos.y, character.bounds.w, character.bounds.h);
 
@@ -552,8 +552,8 @@ Game.prototype.checkDirectionChange = function () {
 	var targetTile = tile;
 	var validMargin = false;
 	var tileCenter = {
-		x: tile.x * this.tileMap.tileW + this.tileMap.tileW / 2,
-		y: tile.y * this.tileMap.tileH + this.tileMap.tileH / 2
+		x: tile.x * this.tileMap.tileBounds.w + this.tileMap.tileBounds.w / 2,
+		y: tile.y * this.tileMap.tileBounds.h + this.tileMap.tileBounds.h / 2
 	};
 
 	if ((this.dirChangeDirection === Const.direction.up || this.dirChangeDirection === Const.direction.down) &&
@@ -660,11 +660,12 @@ Game.prototype.updatePositions = function () {
 
 		// Horrible patch to correct positions when ghosts would go through a wall
 		// @TODO: Create a better movement speed logic
+		// @TODO: FIX BUG!!!
 		if ((this.ghosts[index].status === Const.ghost.status.normal || this.ghosts[index].status === Const.ghost.status.frightened
-				|| this.ghosts[index].status === Const.ghost.status.returning) && this.checkGhostWallCollisions(this.ghosts[index])) {
+				|| this.ghosts[index].status === Const.ghost.status.returning) && this.checkWallCollisions(this.ghosts[index])) {
 			do {
 				this.ghosts[index].correctPosition(-0.5);
-			} while (this.checkGhostWallCollisions(this.ghosts[index]));
+			} while (this.checkWallCollisions(this.ghosts[index]));
 		}
 	}
 };
@@ -855,18 +856,14 @@ Game.prototype.getPinkyChaseTile = function (pacManTile) {
 
 Game.prototype.getClydeChaseTile = function (pacManTile) {
 	var clyde = this.ghosts[Const.ghost.key.clyde];
-
 	var clydeTile = this.tileMap.getCorrespondingTile(clyde.pos.x + (clyde.bounds.w / 2), clyde.pos.y + (clyde.bounds.h / 2));
-	var clydeDistance = Math.abs(pacManTile.x - clydeTile.x) + Math.abs(pacManTile.y - clydeTile.y);
+	var clydeDistance = Math.sqrt(Math.abs(pacManTile.x - clydeTile.x)^2 + Math.abs(pacManTile.y - clydeTile.y)^2);
 
-	var tile = {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	var tile = new Vector(pacManTile.x, pacManTile.y);
 
 	if (clydeDistance < 8) {
 		tile.x = Const.targetTiles.scatter.clyde.x;
-		tile.y = Const.targetTiles.scatter.clyde.	y;
+		tile.y = Const.targetTiles.scatter.clyde.y;
 	}
 
 	return tile;
@@ -1145,7 +1142,7 @@ Game.prototype.correctPacmanLane = function () {
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
 		case Const.direction.down:
-			var currentTileCenterX = currentTile.x * this.tileMap.tileW + (this.tileMap.tileW / 2);
+			var currentTileCenterX = currentTile.x * this.tileMap.tileBounds.w + (this.tileMap.tileBounds.w / 2);
 			var pacManCenterX = this.pacMan.pos.x + this.pacMan.bounds.w / 2;
 			currentTileCenterX += 1;
 
@@ -1158,7 +1155,7 @@ Game.prototype.correctPacmanLane = function () {
 			break;
 		case Const.direction.left:
 		case Const.direction.right:
-			var currentTileCenterY = currentTile.y * this.tileMap.tileH + (this.tileMap.tileH / 2);
+			var currentTileCenterY = currentTile.y * this.tileMap.tileBounds.h + (this.tileMap.tileBounds.h / 2);
 			var pacManCenterY = this.pacMan.pos.y + this.pacMan.bounds.h / 2;
 
 			if (pacManCenterY < currentTileCenterY && pacManCenterY > currentTileCenterY - Const.pacMan.cornering.up) {
