@@ -30,8 +30,8 @@ Item.prototype.initialize = function (objectData) {
 
 	this.pos.x = objectData.x;
 	
-	this.w = objectData.width;
-	this.h = objectData.height;
+	this.bounds.w = objectData.width;
+	this.bounds.h = objectData.height;
 
 	this.rotation = objectData.rotation;
 	this.visible = objectData.visible;

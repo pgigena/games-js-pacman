@@ -708,24 +708,23 @@ Game.prototype.waitSpawn = function (ghostKey) {
 	ghost.moveSpeed = Const.ghost.speed.ghostPen;
 
 	// Move the ghost up and down as long as it is waiting to spawn
-	if (ghost.moveDirection === Const.direction.up && ghost.y <= this.tileMap.ghostPen.y) {
+	if (ghost.moveDirection === Const.direction.up && ghost.pos.y <= this.tileMap.ghostPen.pos.y) {
 		ghost.changeDirection(Const.direction.down);
-	} else if (ghost.moveDirection === Const.direction.down && ghost.y + ghost.h >= this.tileMap.ghostPen.y + this.tileMap.ghostPen.h) {
+	} else if (ghost.moveDirection === Const.direction.down && ghost.pos.y + ghost.bounds.h >= this.tileMap.ghostPen.pos.y + this.tileMap.ghostPen.bounds.h) {
 		ghost.changeDirection(Const.direction.up);
 	}
 };
 
 Game.prototype.spawnGhost = function (ghostKey) {
 	var ghost = this.ghosts[ghostKey];
-	var ghostCenterX = ghost.x + (ghost.w / 2);
-	var ghostPenCenterX = this.tileMap.ghostPen.x + (this.tileMap.ghostPen.w / 2);
+	var ghostCenterX = ghost.pos.x + (ghost.bounds.w / 2);
+	var ghostPenCenterX = this.tileMap.ghostPen.pos.x + (this.tileMap.ghostPen.bounds.w / 2);
 
 	if (ghostCenterX >= ghostPenCenterX - 0.75 && ghostCenterX <= ghostPenCenterX + 0.75) {
 		if (ghost.moveDirection !== Const.direction.up) {
 			ghost.changeDirection(Const.direction.up);
 		} else {
-			var currentTile = this.tileMap.getCorrespondingTile(ghost.x, ghost.y + ghost.h);
-
+			var currentTile = this.tileMap.getCorrespondingTile(ghost.pos.x, ghost.pos.y + ghost.bounds.h);
 			if (currentTile.y === Const.targetTiles.ghostPen.y) {
 
 				if (ghostKey === Const.ghost.key.inky && this.activeGhostCounter === Const.ghost.key.inky) {
@@ -925,7 +924,7 @@ Game.prototype.ghostScatterMode = function (ghostKey) {
 
 Game.prototype.returnMode = function (ghostKey) {
 	var currentGhost = this.ghosts[ghostKey];
-	var ghostTile = this.tileMap.getCorrespondingTile(currentGhost.x + currentGhost.w / 2, currentGhost.y + currentGhost.h / 2);
+	var ghostTile = this.tileMap.getCorrespondingTile(currentGhost.pos.x + currentGhost.bounds.w / 2, currentGhost.pos.y + currentGhost.bounds.h / 2);
 
 	// Enter pen when within the area inmediately above the gate
 	if (((currentGhost.moveDirection === Const.direction.right && ghostTile.x === Const.targetTiles.ghostPen.x)
@@ -941,7 +940,7 @@ Game.prototype.returnMode = function (ghostKey) {
 Game.prototype.enterPen = function (ghostKey) {
 	var currentGhost = this.ghosts[ghostKey];
 
-	if (currentGhost.y >= (this.tileMap.ghostPen.y + this.tileMap.ghostPen.h / 2)) {
+	if (currentGhost.pos.y >= (this.tileMap.ghostPen.pos.y + this.tileMap.ghostPen.bounds.h / 2)) {
 		currentGhost.respawn();
 	}
 };
