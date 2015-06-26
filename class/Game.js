@@ -248,14 +248,14 @@ Game.prototype.resetCharacters = function () {
 	var startingPosLayer = this.tileMap.findObjectLayer(Const.tmx.layers.regions);
 	var startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, Const.pacMan.name);
 
-	this.pacMan.pos.x = startingTile.x;
-	this.pacMan.pos.y = startingTile.y;
+	this.pacMan.pos.x = startingTile.pos.x;
+	this.pacMan.pos.y = startingTile.pos.y;
 
 	for (var index in this.ghosts) {
 		startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, this.ghosts[index].name);
 
-		this.ghosts[index].pos.x = startingTile.x;
-		this.ghosts[index].pos.y = startingTile.y;
+		this.ghosts[index].pos.x = startingTile.pos.x;
+		this.ghosts[index].pos.y = startingTile.pos.y;
 	}
 
 	// Starting directions
@@ -646,7 +646,7 @@ Game.prototype.updatePositions = function () {
 		}
 		this.correctPacmanLane();
 
-//		this.checkDotCollisions();
+		this.checkDotCollisions();
 	}
 	this.ghostManager();
 
@@ -801,14 +801,14 @@ Game.prototype.getBlinkyChaseTile = function (pacManTile) {
 
 Game.prototype.getInkyChaseTile = function (pacManTile) {
 	var blinky = this.ghosts[Const.ghost.key.blinky];
-	var blinkyTile = this.tileMap.getCorrespondingTile(blinky.x + blinky.w / 2, blinky.y + blinky.h / 2);
+	var blinkyTile = this.tileMap.getCorrespondingTile(blinky.pos.x + blinky.bounds.w / 2, blinky.pos.y + blinky.bounds.h / 2);
 
 	var tile = new Vector(pacManTile.x, pacManTile.y);
 
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
 			tile.y -= 2;
-			// Reproduce original game bug (Not intended?)
+			// Reproduces original game bug
 			tile.x -= 2;
 			break;
 		case Const.direction.down:
@@ -857,7 +857,7 @@ Game.prototype.getPinkyChaseTile = function (pacManTile) {
 Game.prototype.getClydeChaseTile = function (pacManTile) {
 	var clyde = this.ghosts[Const.ghost.key.clyde];
 
-	var clydeTile = this.tileMap.getCorrespondingTile(clyde.x + (clyde.w / 2), clyde.y + (clyde.h / 2));
+	var clydeTile = this.tileMap.getCorrespondingTile(clyde.pos.x + (clyde.bounds.w / 2), clyde.pos.y + (clyde.bounds.h / 2));
 	var clydeDistance = Math.abs(pacManTile.x - clydeTile.x) + Math.abs(pacManTile.y - clydeTile.y);
 
 	var tile = {
@@ -867,7 +867,7 @@ Game.prototype.getClydeChaseTile = function (pacManTile) {
 
 	if (clydeDistance < 8) {
 		tile.x = Const.targetTiles.scatter.clyde.x;
-		tile.y = Const.targetTiles.scatter.clyde.y;
+		tile.y = Const.targetTiles.scatter.clyde.	y;
 	}
 
 	return tile;

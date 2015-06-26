@@ -196,10 +196,7 @@ Ghost.prototype.die = function () {
 };
 
 Ghost.prototype.setTargetTile = function (x, y) {
-	this.targetTile = {
-		x: x,
-		y: y
-	};
+	this.targetTile = new Vector(x, y);
 };
 
 Ghost.prototype.pathfinding = function (tileMap) {
