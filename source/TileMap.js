@@ -77,6 +77,8 @@ TileMap.prototype.initialize = function (tmxMap) {
 };
 
 TileMap.prototype.draw = function (g) {
+	g.clearRect(0, 0, g.canvas.width, g.canvas.height);
+
 	var layerIndex = this.layers.length + 1;
 
 	while (--layerIndex) {
@@ -86,10 +88,6 @@ TileMap.prototype.draw = function (g) {
 			this.drawTileLayer(g, currentLayer);
 		}
 	}
-};
-
-TileMap.prototype.clear = function (g) {
-	g.clearRect(0, 0, g.canvas.width, g.canvas.height);
 };
 
 TileMap.prototype.drawObjectLayers = function (g) {
