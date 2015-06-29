@@ -1,3 +1,5 @@
+/* global Resource, audio */
+
 function Sound(path) {
 	Resource.apply(this);
 

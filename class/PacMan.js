@@ -1,3 +1,5 @@
+/* global Character, Const */
+
 function PacMan(x, y, w, h) {
 	Character.apply(this, x, y, w, h);
 

@@ -1,3 +1,5 @@
+/* global Ghost, Const, Config */
+
 function Pinky() {
 	Ghost.apply(this);
 }

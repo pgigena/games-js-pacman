@@ -1,3 +1,5 @@
+/* global Const, ResourceManager */
+
 function Sandbox() {
 	this.gameTimer = null;
 	this.animation = null;

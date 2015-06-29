@@ -1,3 +1,5 @@
+/* global Config, Ghost, Const */
+
 function Clyde() {
 	Ghost.apply(this);
 }

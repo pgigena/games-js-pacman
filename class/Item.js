@@ -1,3 +1,5 @@
+/* global Collidable */
+
 function Item(x, y, w, h) {
 	Collidable.apply(this, x, y, w, h);
 

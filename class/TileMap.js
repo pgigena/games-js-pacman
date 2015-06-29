@@ -1,3 +1,5 @@
+/* global Resource, TileLayer, ResourceManager, Config, Const */
+
 function TileMap() {
 	Resource.apply(this);
 

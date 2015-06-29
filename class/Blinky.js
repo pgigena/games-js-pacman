@@ -1,3 +1,5 @@
+/* global Const, Ghost, Config */
+
 function Blinky() {
 	Ghost.apply(this);
 

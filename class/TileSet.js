@@ -1,3 +1,5 @@
+/* global Const */
+
 function TileSet() {
 	this.sprite = null;
 

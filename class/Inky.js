@@ -1,3 +1,5 @@
+/* global Ghost, Const, Config */
+
 function Inky() {
 	Ghost.apply(this);
 }

@@ -1,3 +1,5 @@
+/* global Config */
+
 function Animation(sprite, loopable, fwd, ticsPerSecond) {
 	this.sprite = (sprite === undefined ? null : sprite);
 
