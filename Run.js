@@ -1,5 +1,3 @@
-"use strict";
-
 var game;
 
 window.onload = function () {
