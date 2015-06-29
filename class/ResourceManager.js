@@ -1,3 +1,5 @@
+/* global Const */
+
 function ResourceManager() {
 }
 
@@ -15,9 +17,9 @@ ResourceManager.getSprite = function (imagePath) {
 	return ResourceManager.sprites[imagePath];
 };
 
-ResourceManager.loadSprite = function (imagePath) {
-	ResourceManager.sprites[imagePath] = new Sprite(Const.path.image + imagePath + Const.format.image);
-	ResourceManager.sprites[imagePath].load();
+ResourceManager.loadSprite = function (spritePath) {
+	ResourceManager.sprites[spritePath] = new Sprite(Const.path.sprite + spritePath + Const.format.image);
+	ResourceManager.sprites[spritePath].load();
 };
 
 ResourceManager.getSound = function (key) {

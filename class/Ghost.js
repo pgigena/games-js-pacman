@@ -1,3 +1,7 @@
+/* global Const, Character */
+
+"use strict";
+
 function Ghost(x, y, w, h) {
 	Character.apply(this, x, y, w, h);
 
@@ -207,7 +211,6 @@ Ghost.prototype.pathfinding = function (tileMap) {
 	}
 
 	var currentTile = currentTiles[0];
-
 	if (this.revertDirectionFlag) {
 		this.revertDirection();
 	}
@@ -393,16 +396,16 @@ Ghost.prototype.revertDirection = function () {
 	this.changeDirection(this.getOppositeDirection(this.moveDirection));
 };
 
+
 Ghost.prototype.correctPosition = function (correctionMargin) {
 	this.prevPos.x = this.pos.x;
 	this.prevPos.y = this.pos.y;
 
-	var newPos = new Vector();
+	var newPos = new Vector(this.pos.x, this.pos.y);
 
 	var center = new Vector(
 		this.pos.x + (this.bounds.w / 2),
-		this.pos.y + (this.bounds.h / 2)
-	);
+		this.pos.y + (this.bounds.h / 2));
 
 	switch (this.moveDirection) {
 		case Const.direction.left:
@@ -435,8 +438,6 @@ Ghost.prototype.correctPosition = function (correctionMargin) {
 				newPos.y = 0 - Math.round(this.bounds.h / 2);
 			}
 			break;
-		case Const.direction.stopped:
-			break;
 	}
 
 	this.pos.x = newPos.x;
@@ -454,7 +455,7 @@ Ghost.prototype.getOppositeDirection = function (direction) {
 		case Const.direction.right:
 			return Const.direction.left;
 		default:
-			console.log(direction + ' is invalid direction');
+			throw ('Invalid direction [' + direction + ']');
 	}
 };
 

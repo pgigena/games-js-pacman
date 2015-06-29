@@ -1,3 +1,5 @@
+/* global Collidable, Const, Config */
+
 function Character(x, y, w, h) {
 	Collidable.apply(this, x, y, w, h);
 	this.prevPos = new Vector();
@@ -22,7 +24,7 @@ Character.prototype.updatePosition = function () {
 	this.prevPos.x = this.pos.x;
 	this.prevPos.y = this.pos.y;
 
-	var newPos = new Vector(this.pos.x, this.pos.y)
+	var newPos = new Vector(this.pos.x, this.pos.y);
 
 	var center = {
 		x: this.pos.x + (this.bounds.w / 2),

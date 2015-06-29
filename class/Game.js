@@ -660,7 +660,6 @@ Game.prototype.updatePositions = function () {
 
 		// Horrible patch to correct positions when ghosts would go through a wall
 		// @TODO: Create a better movement speed logic
-		// @TODO: FIX BUG!!!
 		if ((this.ghosts[index].status === Const.ghost.status.normal || this.ghosts[index].status === Const.ghost.status.frightened
 				|| this.ghosts[index].status === Const.ghost.status.returning) && this.checkWallCollisions(this.ghosts[index])) {
 			do {
