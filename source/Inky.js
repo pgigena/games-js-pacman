@@ -1,3 +1,5 @@
+/* global Ghost, Const, Config */
+
 function Inky() {
 	Ghost.apply(this);
 }
@@ -24,7 +26,7 @@ Inky.prototype.draw = function (g) {
 		g.fillStyle = '#0ff';
 		g.strokeStyle = '#fff';
 
-		g.fillRect(this.targetTile.x * 18, this.targetTile.y * 18, this.w, this.h);
+		g.fillRect(this.targetTile.x * 18, this.targetTile.y * 18, this.bounds.w, this.bounds.h);
 		g.strokeText('I', (this.targetTile.x * 18) + 6, (this.targetTile.y * 18) + 12);
 
 		g.fillStyle = fillStyle;

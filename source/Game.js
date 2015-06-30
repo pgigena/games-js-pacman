@@ -214,6 +214,7 @@ Game.prototype.loadResources = function () {
 };
 
 Game.prototype.initCanvases = function () {
+	console.log(this.tileMap);
 	ResourceManager.createCanvas('map', Const.board.w, Const.board.h, 0);
 	ResourceManager.createCanvas('game', Const.board.w, Const.board.h, 1);
 	ResourceManager.createCanvas('hud', Const.board.w, Const.board.h, 2);
@@ -223,10 +224,10 @@ Game.prototype.initCanvases = function () {
 	document.body.appendChild(ResourceManager.getCanvas('hud'));
 	var that = this;
 
-	document.getElementById('hud').addEventListener('click', function (evt) {
+//	document.getElementById('hud').addEventListener('click', function (evt) {
 //		var tile = that.tileMap.getCorrespondingTile(evt.x, evt.y);
-		that.ghosts[Const.ghost.key.blinky].setTargetTile(tile.x, tile.y);
-	});
+//		that.ghosts[Const.ghost.key.blinky].setTargetTile(tile.x, tile.y);
+//	});
 
 	this.graphics = ResourceManager.getCanvas('game').getContext('2d');
 	this.hudGraphics = ResourceManager.getCanvas('hud').getContext('2d');
@@ -248,14 +249,14 @@ Game.prototype.resetCharacters = function () {
 	var startingPosLayer = this.tileMap.findObjectLayer(Const.tmx.layers.regions);
 	var startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, Const.pacMan.name);
 
-	this.pacMan.x = startingTile.x;
-	this.pacMan.y = startingTile.y;
+	this.pacMan.pos.x = startingTile.pos.x;
+	this.pacMan.pos.y = startingTile.pos.y;
 
 	for (var index in this.ghosts) {
 		startingTile = startingPosLayer.findItemByProperty(Const.tmx.properties.character, this.ghosts[index].name);
 
-		this.ghosts[index].x = startingTile.x;
-		this.ghosts[index].y = startingTile.y;
+		this.ghosts[index].pos.x = startingTile.pos.x;
+		this.ghosts[index].pos.y = startingTile.pos.y;
 	}
 
 	// Starting directions
@@ -325,7 +326,7 @@ Game.prototype.mainLoop = function () {
 			this.draw();
 			break;
 		case Const.gameState.eatingGhost:
-			// Draw score over ghost
+			// @TODO: Draw score over ghost
 			this.drawHud();
 			break;
 		case Const.gameState.ready:
@@ -346,32 +347,31 @@ Game.prototype.mainLoop = function () {
 };
 
 Game.prototype.checkPacmanWallCollisions = function () {
-	var center = {
-		x: this.pacMan.x + this.pacMan.w / 2,
-		y: this.pacMan.y + this.pacMan.h / 2
-	};
+	var center = new Vector(
+		this.pacMan.pos.x + this.pacMan.bounds.w / 2,
+		this.pacMan.pos.y + this.pacMan.bounds.h / 2);
 
 	var tileMap = this.tileMap;
 	var tile = tileMap.getCorrespondingTile(center.x, center.y);
 
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
-			if ((center.y <= (tile.y * tileMap.tileH) + 6) && tileMap.hasCollision(tile.x, tile.y - 1)) {
+			if ((center.y <= (tile.y * tileMap.tileBounds.h) + 6) && tileMap.hasCollision(tile.x, tile.y - 1)) {
 				return true;
 			}
 			break;
 		case Const.direction.down:
-			if ((center.y >= (tile.y * tileMap.tileH) + tileMap.tileH - 7) && tileMap.hasCollision(tile.x, tile.y + 1)) {
+			if ((center.y >= (tile.y * tileMap.tileBounds.h) + tileMap.tileBounds.h - 7) && tileMap.hasCollision(tile.x, tile.y + 1)) {
 				return true;
 			}
 			break;
 		case Const.direction.left:
-			if ((center.x <= (tile.x * tileMap.tileW) + 6) && tileMap.hasCollision(tile.x - 1, tile.y)) {
+			if ((center.x <= (tile.x * tileMap.tileBounds.w) + 6) && tileMap.hasCollision(tile.x - 1, tile.y)) {
 				return true;
 			}
 			break;
 		case Const.direction.right:
-			if ((center.x >= (tile.x * tileMap.tileW) + tileMap.tileW - 7) && tileMap.hasCollision(tile.x + 1, tile.y)) {
+			if ((center.x >= (tile.x * tileMap.tileBounds.w) + tileMap.tileBounds.w - 7) && tileMap.hasCollision(tile.x + 1, tile.y)) {
 				return true;
 			}
 			break;
@@ -381,9 +381,9 @@ Game.prototype.checkPacmanWallCollisions = function () {
 	return false;
 };
 
-Game.prototype.checkGhostWallCollisions = function (character) {
+Game.prototype.checkWallCollisions = function (character) {
 	var tileMap = this.tileMap;
-	var collidingTiles = tileMap.getCorrespondingTiles(character.x, character.y, character.w, character.h);
+	var collidingTiles = tileMap.getCorrespondingTiles(character.pos.x, character.pos.y, character.bounds.w, character.bounds.h);
 
 	for (var i in collidingTiles) {
 		if (tileMap.hasCollision(collidingTiles[i].x, collidingTiles[i].y)) {
@@ -397,11 +397,11 @@ Game.prototype.checkGhostWallCollisions = function (character) {
 
 Game.prototype.checkCollisions = function () {
 	var ghosts = this.ghosts;
-	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.x + this.pacMan.w / 2, this.pacMan.y + this.pacMan.h / 2);
+	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x + this.pacMan.bounds.w / 2, this.pacMan.pos.y + this.pacMan.bounds.h / 2);
 
 	for (var index in ghosts) {
 		if (!Config.settings.ghostBoxCollision) {
-			var ghostTile = this.tileMap.getCorrespondingTile(ghosts[index].x + ghosts[index].w / 2, ghosts[index].y + ghosts[index].h / 2);
+			var ghostTile = this.tileMap.getCorrespondingTile(ghosts[index].pos.x + ghosts[index].bounds.w / 2, ghosts[index].pos.y + ghosts[index].bounds.h / 2);
 		}
 
 		if (Config.settings.ghostBoxCollision && this.pacMan.isColliding(ghosts[index])
@@ -431,7 +431,6 @@ Game.prototype.checkCollisions = function () {
 				});
 				ghostEat.play();
 			} else if (!ghosts[index].isReturning()) {
-				// @TODO: UNCOMMENT!
 				this.killPacMan();
 			}
 		}
@@ -439,7 +438,7 @@ Game.prototype.checkCollisions = function () {
 };
 
 Game.prototype.checkDotCollisions = function () {
-	var correspondingTiles = this.tileMap.getCorrespondingTiles(this.pacMan.x, this.pacMan.y, this.pacMan.w, this.pacMan.h);
+	var correspondingTiles = this.tileMap.getCorrespondingTiles(this.pacMan.pos.x, this.pacMan.pos.y, this.pacMan.bounds.w, this.pacMan.bounds.h);
 
 	if (this.tileMap.fruitVisible && this.pacMan.isColliding(this.tileMap.currentFruit)) {
 		ResourceManager.getSound('eatfruit').play();
@@ -546,16 +545,16 @@ Game.prototype.keyHandler = function (keyCode) {
 
 Game.prototype.checkDirectionChange = function () {
 	var center = {
-		x: this.pacMan.x + this.pacMan.w / 2,
-		y: this.pacMan.y + this.pacMan.h / 2
+		x: this.pacMan.pos.x + this.pacMan.bounds.w / 2,
+		y: this.pacMan.pos.y + this.pacMan.bounds.h / 2
 	};
 
 	var tile = this.tileMap.getCorrespondingTile(center.x, center.y);
 	var targetTile = tile;
 	var validMargin = false;
 	var tileCenter = {
-		x: tile.x * this.tileMap.tileW + this.tileMap.tileW / 2,
-		y: tile.y * this.tileMap.tileH + this.tileMap.tileH / 2
+		x: tile.x * this.tileMap.tileBounds.w + this.tileMap.tileBounds.w / 2,
+		y: tile.y * this.tileMap.tileBounds.h + this.tileMap.tileBounds.h / 2
 	};
 
 	if ((this.dirChangeDirection === Const.direction.up || this.dirChangeDirection === Const.direction.down) &&
@@ -663,10 +662,10 @@ Game.prototype.updatePositions = function () {
 		// Horrible patch to correct positions when ghosts would go through a wall
 		// @TODO: Create a better movement speed logic
 		if ((this.ghosts[index].status === Const.ghost.status.normal || this.ghosts[index].status === Const.ghost.status.frightened
-				|| this.ghosts[index].status === Const.ghost.status.returning) && this.checkGhostWallCollisions(this.ghosts[index])) {
+				|| this.ghosts[index].status === Const.ghost.status.returning) && this.checkWallCollisions(this.ghosts[index])) {
 			do {
 				this.ghosts[index].correctPosition(-0.5);
-			} while (this.checkGhostWallCollisions(this.ghosts[index]));
+			} while (this.checkWallCollisions(this.ghosts[index]));
 		}
 	}
 };
@@ -710,24 +709,23 @@ Game.prototype.waitSpawn = function (ghostKey) {
 	ghost.moveSpeed = Const.ghost.speed.ghostPen;
 
 	// Move the ghost up and down as long as it is waiting to spawn
-	if (ghost.moveDirection === Const.direction.up && ghost.y <= this.tileMap.ghostPen.y) {
+	if (ghost.moveDirection === Const.direction.up && ghost.pos.y <= this.tileMap.ghostPen.pos.y) {
 		ghost.changeDirection(Const.direction.down);
-	} else if (ghost.moveDirection === Const.direction.down && ghost.y + ghost.h >= this.tileMap.ghostPen.y + this.tileMap.ghostPen.h) {
+	} else if (ghost.moveDirection === Const.direction.down && ghost.pos.y + ghost.bounds.h >= this.tileMap.ghostPen.pos.y + this.tileMap.ghostPen.bounds.h) {
 		ghost.changeDirection(Const.direction.up);
 	}
 };
 
 Game.prototype.spawnGhost = function (ghostKey) {
 	var ghost = this.ghosts[ghostKey];
-	var ghostCenterX = ghost.x + (ghost.w / 2);
-	var ghostPenCenterX = this.tileMap.ghostPen.x + (this.tileMap.ghostPen.w / 2);
+	var ghostCenterX = ghost.pos.x + (ghost.bounds.w / 2);
+	var ghostPenCenterX = this.tileMap.ghostPen.pos.x + (this.tileMap.ghostPen.bounds.w / 2);
 
 	if (ghostCenterX >= ghostPenCenterX - 0.75 && ghostCenterX <= ghostPenCenterX + 0.75) {
 		if (ghost.moveDirection !== Const.direction.up) {
 			ghost.changeDirection(Const.direction.up);
 		} else {
-			var currentTile = this.tileMap.getCorrespondingTile(ghost.x, ghost.y + ghost.h);
-
+			var currentTile = this.tileMap.getCorrespondingTile(ghost.pos.x, ghost.pos.y + ghost.bounds.h);
 			if (currentTile.y === Const.targetTiles.ghostPen.y) {
 
 				if (ghostKey === Const.ghost.key.inky && this.activeGhostCounter === Const.ghost.key.inky) {
@@ -776,7 +774,7 @@ Game.prototype.spawnConditionsMet = function (ghostKey) {
 };
 
 Game.prototype.ghostChaseMode = function (ghostKey) {
-	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.x + (this.pacMan.w / 2), this.pacMan.y + (this.pacMan.h / 2));
+	var pacManTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x + (this.pacMan.bounds.w / 2), this.pacMan.pos.y + (this.pacMan.bounds.h / 2));
 	var targetTile = null;
 
 	switch (ghostKey) {
@@ -798,25 +796,19 @@ Game.prototype.ghostChaseMode = function (ghostKey) {
 };
 
 Game.prototype.getBlinkyChaseTile = function (pacManTile) {
-	return {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	return new Vector(pacManTile.x, pacManTile.y);
 };
 
 Game.prototype.getInkyChaseTile = function (pacManTile) {
 	var blinky = this.ghosts[Const.ghost.key.blinky];
-	var blinkyTile = this.tileMap.getCorrespondingTile(blinky.x + blinky.w / 2, blinky.y + blinky.h / 2);
+	var blinkyTile = this.tileMap.getCorrespondingTile(blinky.pos.x + blinky.bounds.w / 2, blinky.pos.y + blinky.bounds.h / 2);
 
-	var tile = {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	var tile = new Vector(pacManTile.x, pacManTile.y);
 
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
 			tile.y -= 2;
-			// Reproduce original game bug (Not intended?)
+			// Reproduces original game bug
 			tile.x -= 2;
 			break;
 		case Const.direction.down:
@@ -864,14 +856,10 @@ Game.prototype.getPinkyChaseTile = function (pacManTile) {
 
 Game.prototype.getClydeChaseTile = function (pacManTile) {
 	var clyde = this.ghosts[Const.ghost.key.clyde];
+	var clydeTile = this.tileMap.getCorrespondingTile(clyde.pos.x + (clyde.bounds.w / 2), clyde.pos.y + (clyde.bounds.h / 2));
+	var clydeDistance = Math.sqrt(Math.abs(pacManTile.x - clydeTile.x)^2 + Math.abs(pacManTile.y - clydeTile.y)^2);
 
-	var clydeTile = this.tileMap.getCorrespondingTile(clyde.x + (clyde.w / 2), clyde.y + (clyde.h / 2));
-	var clydeDistance = Math.abs(pacManTile.x - clydeTile.x) + Math.abs(pacManTile.y - clydeTile.y);
-
-	var tile = {
-		x: pacManTile.x,
-		y: pacManTile.y
-	};
+	var tile = new Vector(pacManTile.x, pacManTile.y);
 
 	if (clydeDistance < 8) {
 		tile.x = Const.targetTiles.scatter.clyde.x;
@@ -933,7 +921,7 @@ Game.prototype.ghostScatterMode = function (ghostKey) {
 
 Game.prototype.returnMode = function (ghostKey) {
 	var currentGhost = this.ghosts[ghostKey];
-	var ghostTile = this.tileMap.getCorrespondingTile(currentGhost.x + currentGhost.w / 2, currentGhost.y + currentGhost.h / 2);
+	var ghostTile = this.tileMap.getCorrespondingTile(currentGhost.pos.x + currentGhost.bounds.w / 2, currentGhost.pos.y + currentGhost.bounds.h / 2);
 
 	// Enter pen when within the area inmediately above the gate
 	if (((currentGhost.moveDirection === Const.direction.right && ghostTile.x === Const.targetTiles.ghostPen.x)
@@ -949,7 +937,7 @@ Game.prototype.returnMode = function (ghostKey) {
 Game.prototype.enterPen = function (ghostKey) {
 	var currentGhost = this.ghosts[ghostKey];
 
-	if (currentGhost.y >= (this.tileMap.ghostPen.y + this.tileMap.ghostPen.h / 2)) {
+	if (currentGhost.pos.y >= (this.tileMap.ghostPen.pos.y + this.tileMap.ghostPen.bounds.h / 2)) {
 		currentGhost.respawn();
 	}
 };
@@ -1150,32 +1138,41 @@ Game.prototype.removeFruit = function () {
 };
 
 Game.prototype.correctPacmanLane = function () {
-	var currentTile = this.tileMap.getCorrespondingTile(this.pacMan.x, this.pacMan.y);
+	var currentTile = this.tileMap.getCorrespondingTile(this.pacMan.pos.x, this.pacMan.pos.y);
 	switch (this.pacMan.moveDirection) {
 		case Const.direction.up:
 		case Const.direction.down:
-			var currentTileCenterX = currentTile.x * this.tileMap.tileW + (this.tileMap.tileW / 2);
-			var pacManCenterX = this.pacMan.x + this.pacMan.w / 2;
+			var currentTileCenterX = currentTile.x * this.tileMap.tileBounds.w + (this.tileMap.tileBounds.w / 2);
+			var pacManCenterX = this.pacMan.pos.x + this.pacMan.bounds.w / 2;
 			currentTileCenterX += 1;
 
 			if (pacManCenterX < currentTileCenterX && pacManCenterX > currentTileCenterX - Const.pacMan.cornering.left) {
-				this.pacMan.x++;
+				this.pacMan.pos.x++;
 			} else if (pacManCenterX > currentTileCenterX && pacManCenterX < currentTileCenterX + Const.pacMan.cornering.right) {
-				this.pacMan.x--;
+				this.pacMan.pos.x--;
 			}
 
 			break;
 		case Const.direction.left:
 		case Const.direction.right:
-			var currentTileCenterY = currentTile.y * this.tileMap.tileH + (this.tileMap.tileH / 2);
-			var pacManCenterY = this.pacMan.y + this.pacMan.h / 2;
+			var currentTileCenterY = currentTile.y * this.tileMap.tileBounds.h + (this.tileMap.tileBounds.h / 2);
+			var pacManCenterY = this.pacMan.pos.y + this.pacMan.bounds.h / 2;
 
 			if (pacManCenterY < currentTileCenterY && pacManCenterY > currentTileCenterY - Const.pacMan.cornering.up) {
-				this.pacMan.y++;
+				this.pacMan.pos.y++;
 			} else if (pacManCenterY > currentTileCenterY && pacManCenterY < currentTileCenterY + Const.pacMan.cornering.down) {
-				this.pacMan.y--;
+				this.pacMan.pos.y--;
 			}
 
 			break;
 	}
+};
+
+Game.prototype.rescale = function (newScale) {
+	Config.settings.scale = newScale;
+
+	/*
+	 * @TODO: Rescale canvas?
+	 */
+	this.drawMap();
 };

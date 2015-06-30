@@ -1,11 +1,12 @@
+/* global Resource, TileLayer, ResourceManager, Config, Const */
+
 function TileMap() {
 	Resource.apply(this);
 
 	this.w = 0;
 	this.h = 0;
 
-	this.tileW = 0;
-	this.tileH = 0;
+	this.tileBounds = new BoundingBox();
 
 	this.layers = new Array();
 	this.tileSets = new Array();
@@ -38,8 +39,7 @@ TileMap.prototype.initialize = function (tmxMap) {
 	this.w = tmxMap.width;
 	this.h = tmxMap.height;
 
-	this.tileW = tmxMap.tilewidth;
-	this.tileH = tmxMap.tileheight;
+	this.tileBounds = new BoundingBox(tmxMap.tilewidth, tmxMap.tileheight);
 
 	// Initialize tileSets
 	for (var i in tmxMap.tilesets) {
@@ -77,6 +77,8 @@ TileMap.prototype.initialize = function (tmxMap) {
 };
 
 TileMap.prototype.draw = function (g) {
+	g.clearRect(0, 0, g.canvas.width, g.canvas.height);
+
 	var layerIndex = this.layers.length + 1;
 
 	while (--layerIndex) {
@@ -86,10 +88,6 @@ TileMap.prototype.draw = function (g) {
 			this.drawTileLayer(g, currentLayer);
 		}
 	}
-};
-
-TileMap.prototype.clear = function (g) {
-	g.clearRect(0, 0, g.canvas.width, g.canvas.height);
 };
 
 TileMap.prototype.drawObjectLayers = function (g) {
@@ -131,14 +129,14 @@ TileMap.prototype.drawTileLayer = function (g, layer) {
 				} else {
 					g.fillStyle = '#0000FF';
 				}
-//				g.fillRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
-				g.fillRect((tileIndex * this.tileW) * Config.settings.scale, (rowNumber * this.tileH) * Config.settings.scale, this.tileW * Config.settings.scale, this.tileH * Config.settings.scale);
+//				g.fillRect((tileIndex * this.tileBounds.w), (rowNumber * this.tileBounds.h), this.tileBounds.w, this.tileBounds.h);
+				g.fillRect((tileIndex * this.tileBounds.w) * Config.settings.scale, (rowNumber * this.tileBounds.h) * Config.settings.scale, this.tileBounds.w * Config.settings.scale, this.tileBounds.h * Config.settings.scale);
 			}
 
 			if (Config.debug.tileGrid) {
 				g.strokeStyle = '#00FF00';
-//				g.strokeRect((tileIndex * this.tileW), (rowNumber * this.tileH), this.tileW, this.tileH);
-				g.strokeRect((tileIndex * this.tileW) * Config.settings.scale, (rowNumber * this.tileH) * Config.settings.scale, this.tileW * Config.settings.scale, this.tileH * Config.settings.scale);
+//				g.strokeRect((tileIndex * this.tileBounds.w), (rowNumber * this.tileBounds.h), this.tileBounds.w, this.tileBounds.h);
+				g.strokeRect((tileIndex * this.tileBounds.w) * Config.settings.scale, (rowNumber * this.tileBounds.h) * Config.settings.scale, this.tileBounds.w * Config.settings.scale, this.tileBounds.h * Config.settings.scale);
 			}
 		}
 	}
@@ -147,7 +145,7 @@ TileMap.prototype.drawTileLayer = function (g, layer) {
 TileMap.prototype.drawObjectLayer = function (g, layer) {
 	for (var i in layer.items) {
 		if (layer.items[i].visible) {
-			this.drawTile(g, layer.items[i].gId, layer.items[i].x, layer.items[i].y);
+			this.drawTile(g, layer.items[i].gId, layer.items[i].pos.x, layer.items[i].pos.y);
 		}
 	}
 };
@@ -180,22 +178,19 @@ TileMap.prototype.getCorrespondingTile = function (x, y) {
 TileMap.prototype.getCorrespondingTiles = function (x, y, w, h) {
 	var response = new Array();
 
-	var topLeftTile = {
-		x: (x / this.tileW) | 0,
-		y: (y / this.tileH) | 0
-	};
+	var topLeftTile = new Vector(
+		(x / this.tileBounds.w) | 0,
+		(y / this.tileBounds.h) | 0
+	);
 
-	var bottomRightTile = {
-		x: ((x + w) / this.tileW) | 0,
-		y: ((y + h) / this.tileH) | 0
-	};
+	var bottomRightTile = new Vector(
+		((x + w) / this.tileBounds.w) | 0,
+		((y + h) / this.tileBounds.h) | 0
+	);
 
 	for (var row = topLeftTile.y; row <= bottomRightTile.y; row++) {
 		for (var column = topLeftTile.x; column <= bottomRightTile.x; column++) {
-			var tile = {
-				x: column,
-				y: row
-			};
+			var tile = new Vector(column, row);
 
 			// Wrap the right edge of the map back to the left
 			if (column >= this.w) {
@@ -255,10 +250,10 @@ TileMap.prototype.hasCollision = function (x, y) {
 TileMap.prototype.findIntersection = function (x, y) {
 	var validDirections = 0;
 
-	var above = {x: x, y: y - 1};
-	var left = {x: x - 1, y: y};
-	var below = {x: x, y: y + 1};
-	var right = {x: x + 1, y: y};
+	var above = new Vector(x, y - 1);
+	var left = new Vector(x - 1, y);
+	var below = new Vector(x, y + 1);
+	var right = new Vector(x + 1, y);
 
 	if (above.y < 0) {
 		above.y = this.h - 1;
@@ -299,19 +294,19 @@ TileMap.prototype.getValidAdjacentTiles = function (x, y) {
 	var validTiles = new Array();
 
 	if (!this.hasCollision(x, y - 1)) {
-		validTiles.push({x: x, y: y - 1});
+		validTiles.push(new Vector(x, y - 1));
 	}
 
 	if (!this.hasCollision(x - 1, y)) {
-		validTiles.push({x: x - 1, y: y});
+		validTiles.push(new Vector(x - 1, y));
 	}
 
 	if (!this.hasCollision(x, y + 1)) {
-		validTiles.push({x: x, y: y + 1});
+		validTiles.push(new Vector(x, y + 1));
 	}
 
 	if (!this.hasCollision(x + 1, y)) {
-		validTiles.push({x: x + 1, y: y});
+		validTiles.push(new Vector(x + 1, y));
 	}
 
 	return validTiles;
@@ -332,7 +327,7 @@ TileMap.prototype.buildDotMap = function () {
 		if (layer.items[i].type === Const.tmx.objTypes.fruit) {
 			continue;
 		}
-		var currentTile = this.getCorrespondingTiles(layer.items[i].x, layer.items[i].y, layer.items[i].w, layer.items[i].h);
+		var currentTile = this.getCorrespondingTiles(layer.items[i].pos.x, layer.items[i].pos.y, layer.items[i].bounds.w, layer.items[i].bounds.h);
 		this.dotsCollisionMap[currentTile[0].x][currentTile[0].y] = layer.items[i];
 		this.dotCount++;
 	}

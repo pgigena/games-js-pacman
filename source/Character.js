@@ -1,10 +1,8 @@
+/* global Collidable, Const, Config */
+
 function Character(x, y, w, h) {
 	Collidable.apply(this, x, y, w, h);
-
-	this.prevPos = {
-		x: 0,
-		y: 0
-	};
+	this.prevPos = new Vector();
 
 	this.prevMoveDirection = null;
 
@@ -23,61 +21,58 @@ Character.prototype.updatePosition = function () {
 		return;
 	}
 
-	this.prevPos.x = this.x;
-	this.prevPos.y = this.y;
+	this.prevPos.x = this.pos.x;
+	this.prevPos.y = this.pos.y;
 
-	var newPos = {
-		x: this.x,
-		y: this.y
-	};
+	var newPos = new Vector(this.pos.x, this.pos.y);
 
 	var center = {
-		x: this.x + (this.w / 2),
-		y: this.y + (this.h / 2)
+		x: this.pos.x + (this.bounds.w / 2),
+		y: this.pos.y + (this.bounds.h / 2)
 	};
 
 	switch (this.moveDirection) {
 		case Const.direction.left:
-			newPos.x = this.x - this.moveSpeed;
+			newPos.x = this.pos.x - this.moveSpeed;
 
 			if (center.x - this.moveSpeed < 0) {
-				newPos.x = Const.board.w - Math.round(this.w / 2);
+				newPos.x = Const.board.w - Math.round(this.bounds.w / 2);
 			}
 			break;
 		case Const.direction.right:
-			newPos.x = this.x + this.moveSpeed;
+			newPos.x = this.pos.x + this.moveSpeed;
 
 			if (center.x + this.moveSpeed > Const.board.w) {
-				newPos.x = 0 - Math.round(this.w / 2);
+				newPos.x = 0 - Math.round(this.bounds.w / 2);
 			}
 
 			break;
 		case Const.direction.up:
-			newPos.y = this.y - this.moveSpeed;
+			newPos.y = this.pos.y - this.moveSpeed;
 
 			if (center.y - this.moveSpeed < 0) {
-				newPos.y = Const.board.h - Math.round(this.h / 2);
+				newPos.y = Const.board.h - Math.round(this.bounds.h / 2);
 			}
 
 			break;
 		case Const.direction.down:
-			newPos.y = this.y + this.moveSpeed;
+			newPos.y = this.pos.y + this.moveSpeed;
 
 			if (center.y + this.moveSpeed > Const.board.h) {
-				newPos.y = 0 - Math.round(this.h / 2);
+				newPos.y = 0 - Math.round(this.bounds.h / 2);
 			}
 			break;
 		case Const.direction.stopped:
 			break;
 	}
 
-	this.x = newPos.x;
-	this.y = newPos.y;
+	this.pos.x = newPos.x;
+	this.pos.y = newPos.y;
 };
 
 Character.prototype.revertPosition = function () {
-	this.x = this.prevPos.x;
-	this.y = this.prevPos.y;
+	this.pos.x = this.prevPos.x;
+	this.pos.y = this.prevPos.y;
 };
 
 Character.prototype.revertDirection = function () {
@@ -92,10 +87,10 @@ Character.prototype.changeDirection = function (moveDirection) {
 Character.prototype.draw = function (g) {
 	var overflowX = 0, overflowY = 0;
 	var bounds = {
-		left: this.x,
-		right: this.x + this.w,
-		top: this.y,
-		bottom: this.y + this.h
+		left: this.pos.x,
+		right: this.pos.x + this.bounds.w,
+		top: this.pos.y,
+		bottom: this.pos.y + this.bounds.h
 	};
 
 	if (bounds.left <= 0) {
@@ -116,11 +111,11 @@ Character.prototype.draw = function (g) {
 
 	if (Config.debug.characterBounds) {
 		g.strokeStyle = '#FFFFFF';
-		g.strokeRect(this.x * Config.settings.scale, this.y * Config.settings.scale, this.w * Config.settings.scale, this.h * Config.settings.scale);
+		g.strokeRect(this.pos.x * Config.settings.scale, this.pos.y * Config.settings.scale, this.bounds.w * Config.settings.scale, this.bounds.h * Config.settings.scale);
 	}
 
-//	this.animations[this.currentAnimation].draw(this.x, this.y, this.w, this.h, overflowX, overflowY, g);
-	this.animations[this.currentAnimation].draw(this.x * Config.settings.scale, this.y * Config.settings.scale, this.w * Config.settings.scale, this.h * Config.settings.scale, overflowX, overflowY, g);
+//	this.animations[this.currentAnimation].draw(this.pos.x, this.pos.y, this.bounds.w, this.bounds.h, overflowX, overflowY, g);
+	this.animations[this.currentAnimation].draw(this.pos.x * Config.settings.scale, this.pos.y * Config.settings.scale, this.bounds.w * Config.settings.scale, this.bounds.h * Config.settings.scale, overflowX, overflowY, g);
 };
 
 Character.prototype.changeAnimation = function (animationIndex) {

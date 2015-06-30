@@ -1,3 +1,5 @@
+/* global Resource */
+
 function Sprite(imagePath) {
 	Resource.apply(this);
 

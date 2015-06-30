@@ -20,7 +20,7 @@ var Const = {
 	ghost: {
 		speed: {
 			base: 1,
-			scared: 0.75,
+			scared: 0.5,
 			returning: 3,
 			ghostPen: 0.5
 		},
@@ -129,7 +129,7 @@ var Const = {
 	},
 	path: {
 		root: document.URL.substring(0, document.URL.lastIndexOf('\/')),
-		image: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/sprite/',
+		sprite: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/sprite/',
 		map: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/tilemap/',
 		sound: document.URL.substring(0, document.URL.lastIndexOf('\/')) + '/sound/'
 	},
@@ -142,7 +142,7 @@ var Const = {
 
 var Config = {
 	settings: {
-		scale: 0.5,
+		scale: 1,
 		fps: 60,
 		allowTurnoverMargin: true,
 		turnoverMargin: 5000,

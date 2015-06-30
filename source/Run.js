@@ -1,11 +1,5 @@
 var game;
 
-//var soundFile = ResourceManager.getSound('beginning');
-//soundFile.finish(function () { 
-//
-//});
-//soundFile.play();
-
 window.onload = function () {
 
 //	game = new Sandbox();
@@ -50,6 +44,20 @@ window.onload = function () {
 			visible = true;
 		}
 	});
+
+	var visible = true;
+	document.getElementById("btnHideMap").addEventListener("click", function () {
+		if (visible) {
+			document.getElementById("map").style.display = 'none';
+			this.value = 'Show Map';
+			visible = false;
+		} else {
+			document.getElementById("map").removeAttribute('style');
+			this.value = 'Hide Map';
+			visible = true;
+		}
+	});
+
 
 	debugChecks();
 };
