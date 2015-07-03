@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="28" height="36" tilewidth="18" tileheight="18">
  <tileset firstgid="1" name="board_tiles_green" tilewidth="18" tileheight="18" spacing="1" margin="1">
-  <image source="../sprite/board_tiles_green.png" width="229" height="77"/>
+  <image source="../../sprite/board_tiles_green.png" width="229" height="77"/>
   <tile id="0">
    <properties>
     <property name="collidable" value=""/>
@@ -224,10 +224,10 @@
   </tile>
  </tileset>
  <tileset firstgid="49" name="dots" tilewidth="8" tileheight="8" spacing="1" margin="1">
-  <image source="../sprite/dots.png" width="19" height="10"/>
+  <image source="../../sprite/dots.png" width="19" height="10"/>
  </tileset>
  <tileset firstgid="51" name="fruit" tilewidth="14" tileheight="14" spacing="1" margin="1">
-  <image source="../sprite/fruit.png" width="60" height="31"/>
+  <image source="../../sprite/fruit.png" width="60" height="31"/>
   <tile id="2">
    <properties>
     <property name="order" value="0"/>

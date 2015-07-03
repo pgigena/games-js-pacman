@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="28" height="32" tilewidth="8" tileheight="8">
  <tileset firstgid="1" name="original" tilewidth="8" tileheight="8" spacing="1" margin="1">
-  <image source="../sprite/original.png" width="73" height="46"/>
+  <image source="../../sprite/original.png" width="73" height="46"/>
  </tileset>
  <layer name="maze" width="28" height="32">
   <data>
