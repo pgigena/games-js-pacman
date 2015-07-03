@@ -1,0 +1,282 @@
+{
+	"name": "Blinky",
+	"sprite": "./images/pacman.png",
+	"animations": [
+		{
+			"name": "moveLeft",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					
+					"spriteOffset": {
+						"x": 83,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 103,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "moveRight",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					"spriteOffset": {
+						"x": 123,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 143,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "moveUp",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					
+					"spriteOffset": {
+						"x": 3,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 23,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "moveDown",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					
+					"spriteOffset": {
+						"x": 43,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 63,
+						"y": 103
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "scared",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					
+					"spriteOffset": {
+						"x": 3,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					
+					"spriteOffset": {
+						"x": 23,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "scaredEnding",
+			"loop": true,
+			"fps": 10,
+			"frameSequence": [0, 1, 0, 1, 2, 3, 2, 3],
+			"offset": {
+				"x": 0,
+				"y": 0
+			},
+			"frames": [
+				{
+					
+					"spriteOffset": {
+						"x": 3,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					
+					"spriteOffset": {
+						"x": 23,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					
+					"spriteOffset": {
+						"x": 43,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 63,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		}
+	]
+}
