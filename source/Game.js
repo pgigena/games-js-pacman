@@ -214,7 +214,6 @@ Game.prototype.loadResources = function () {
 };
 
 Game.prototype.initCanvases = function () {
-	console.log(this.tileMap);
 	ResourceManager.createCanvas('map', Const.board.w, Const.board.h, 0);
 	ResourceManager.createCanvas('game', Const.board.w, Const.board.h, 1);
 	ResourceManager.createCanvas('hud', Const.board.w, Const.board.h, 2);
