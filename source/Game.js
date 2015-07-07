@@ -90,13 +90,7 @@ Game.prototype.initializeLevel = function () {
 Game.prototype.start = function () {
 	var that = this;
 	this.initializeLevel();
-
-	this.gameTimer = new Interval(function () {
-
-		window.requestAnimationFrame(function () {
-			that.mainLoop();
-		});
-	}, 1000 / Config.settings.fps);
+	this.mainLoop();
 };
 
 Game.prototype.pause = function () {
@@ -316,6 +310,8 @@ Game.prototype.startLevel = function () {
 };
 
 Game.prototype.mainLoop = function () {
+	var that = this;
+	
 	switch (this.state) {
 		case Const.gameState.playing:
 			this.updatePositions();
@@ -343,6 +339,10 @@ Game.prototype.mainLoop = function () {
 			this.drawHud();
 			break;
 	}
+	
+	window.requestAnimationFrame(function () {
+		that.mainLoop();
+	});
 };
 
 Game.prototype.checkPacmanWallCollisions = function () {

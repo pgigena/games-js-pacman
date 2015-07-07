@@ -1,89 +1,9 @@
 {
-	"name": "Blinky",
+	"name": "Ghost",
 	"sprite": "./images/pacman.png",
 	"animations": [
 		{
-			"name": "moveLeft",
-			"loop": true,
-			"ticsPerFrame": 6,
-			"frameSequence": [0, 1],
-			"offset": {
-				"x": 0,
-				"y": 0
-			},
-			"frames": [
-				{
-					"spriteOffset": {
-						"x": 83,
-						"y": 123
-					},
-					"spriteBounds": {
-						"w": 14,
-						"h": 14
-					},
-					"frameOffset": {
-						"x": 0,
-						"y": 0
-					}
-				},
-				{
-					"spriteOffset": {
-						"x": 103,
-						"y": 123
-					},
-					"spriteBounds": {
-						"w": 14,
-						"h": 14
-					},
-					"frameOffset": {
-						"x": 0,
-						"y": 0
-					}
-				}
-			]
-		},
-		{
-			"name": "moveRight",
-			"loop": true,
-			"ticsPerFrame": 6,
-			"frameSequence": [0, 1],
-			"offset": {
-				"x": 0,
-				"y": 0
-			},
-			"frames": [
-				{
-					"spriteOffset": {
-						"x": 123,
-						"y": 123
-					},
-					"spriteBounds": {
-						"w": 14,
-						"h": 14
-					},
-					"frameOffset": {
-						"x": 0,
-						"y": 0
-					}
-				},
-				{
-					"spriteOffset": {
-						"x": 143,
-						"y": 123
-					},
-					"spriteBounds": {
-						"w": 14,
-						"h": 14
-					},
-					"frameOffset": {
-						"x": 0,
-						"y": 0
-					}
-				}
-			]
-		},
-		{
-			"name": "moveUp",
+			"name": "scared",
 			"loop": true,
 			"ticsPerFrame": 6,
 			"frameSequence": [0, 1],
@@ -95,7 +15,7 @@
 				{
 					"spriteOffset": {
 						"x": 3,
-						"y": 123
+						"y": 163
 					},
 					"spriteBounds": {
 						"w": 14,
@@ -109,7 +29,7 @@
 				{
 					"spriteOffset": {
 						"x": 23,
-						"y": 123
+						"y": 163
 					},
 					"spriteBounds": {
 						"w": 14,
@@ -123,10 +43,10 @@
 			]
 		},
 		{
-			"name": "moveDown",
+			"name": "scared_ending",
 			"loop": true,
 			"ticsPerFrame": 6,
-			"frameSequence": [0, 1],
+			"frameSequence": [0, 1, 0, 1, 2, 3, 2, 3],
 			"offset": {
 				"x": 0,
 				"y": 0
@@ -134,8 +54,36 @@
 			"frames": [
 				{
 					"spriteOffset": {
+						"x": 3,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
+						"x": 23,
+						"y": 163
+					},
+					"spriteBounds": {
+						"w": 14,
+						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"spriteOffset": {
 						"x": 43,
-						"y": 123
+						"y": 163
 					},
 					"spriteBounds": {
 						"w": 14,
@@ -149,11 +97,115 @@
 				{
 					"spriteOffset": {
 						"x": 63,
-						"y": 123
+						"y": 163
 					},
 					"spriteBounds": {
 						"w": 14,
 						"h": 14
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "return_left",
+			"loop": 0,
+			"ticsPerFrame": 1,
+			"frameSequence": [0],
+			"offset": {
+				"x": 1,
+				"y": 4
+			},
+			"frames": [
+				{
+					"spriteOffset": {
+						"x": 45,
+						"y": 207
+					},
+					"spriteBounds": {
+						"w": 10,
+						"h": 5
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "return_right",
+			"loop": 0,
+			"ticsPerFrame": 1,
+			"frameSequence": [0],
+			"offset": {
+				"x": 1,
+				"y": 4
+			},
+			"frames": [
+				{
+					"spriteOffset": {
+						"x": 67,
+						"y": 207
+					},
+					"spriteBounds": {
+						"w": 10,
+						"h": 5
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "return_up",
+			"loop": 0,
+			"ticsPerFrame": 1,
+			"frameSequence": [0],
+			"offset": {
+				"x": 2,
+				"y": 1
+			},
+			"frames": [
+				{
+					"spriteOffset": {
+						"x": 5,
+						"y": 204
+					},
+					"spriteBounds": {
+						"w": 10,
+						"h": 5
+					},
+					"frameOffset": {
+						"x": 0,
+						"y": 0
+					}
+				}
+			]
+		},
+		{
+			"name": "return_down",
+			"loop": 0,
+			"ticsPerFrame": 1,
+			"frameSequence": [0],
+			"offset": {
+				"x": 2,
+				"y": 4
+			},
+			"frames": [
+				{
+					"spriteOffset": {
+						"x": 25,
+						"y": 207
+					},
+					"spriteBounds": {
+						"w": 10,
+						"h": 5
 					},
 					"frameOffset": {
 						"x": 0,
