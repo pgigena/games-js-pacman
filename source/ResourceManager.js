@@ -62,7 +62,7 @@ ResourceManager.loadLevel = function (levelKey) {
 
 	ResourceManager.levels[levelKey] = new TileMap();
 
-	request.open("POST", Const.path.map + levelKey + Const.format.map);
+	request.open("GET", Const.path.map + levelKey + Const.format.map);
 	request.onload = function () {
 		ResourceManager.levels[levelKey].loaded = true;
 		ResourceManager.levels[levelKey].initialize(JSON.parse(request.response));
